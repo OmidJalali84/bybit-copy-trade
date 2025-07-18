@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@fontsource/inter": "^5.2.6",
+    "@mui/material": "^7.2.0",
     "@tronweb3/tronwallet-adapter-bybit": "^1.0.1",
     "next": "15.3.5",
     "react": "^19.0.0",

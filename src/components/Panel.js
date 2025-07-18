@@ -2,78 +2,110 @@
 
 import React, { useState } from "react";
 import TickerBar from "./TickerBar";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 
+// Modal component for position details using MUI Modal
+function PositionDetailsModal({ open, onClose, position }) {
+  if (!open || !position) return null;
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      aria-labelledby="position-details-title"
+      aria-describedby="position-details-description"
+      sx={{ zIndex: 1500 }}
+      BackdropProps={{ style: { backgroundColor: "rgba(0,0,0,0.15)" } }}
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 400,
+          bgcolor: "background.paper",
+          borderRadius: 4,
+          boxShadow: "0 8px 40px rgba(30,60,114,0.35)",
+          overflow: "hidden",
+          p: 0,
+        }}
+      >
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#1e3c72] to-[#2a5298] px-6 py-4 flex items-center justify-between">
+          <span className="text-white text-xl font-bold">Position Details</span>
+          <button
+            className="text-white text-2xl font-bold hover:text-gray-200 focus:outline-none"
+            onClick={onClose}
+            aria-label="Close"
+            style={{ background: "none", border: "none", cursor: "pointer" }}
+          >
+            ×
+          </button>
+        </div>
+        {/* Content */}
+        <div className="p-6 space-y-4 bg-[#f5f6fa]">
+          <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+            <span className="font-semibold text-gray-700">Opened:</span>
+            <span className="text-gray-700">{position.opened}</span>
+          </div>
+          <div className="flex items-center bg-white rounded-lg px-4 py-3 gap-4">
+            <span className="font-semibold text-gray-700">Symbol:</span>
+            <img
+              src={position.icon}
+              alt={position.symbol}
+              className="w-10 h-10 rounded-full shadow"
+            />
+            <span className="text-gray-700 font-bold">{position.symbol}</span>
+          </div>
+          <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+            <span className="font-semibold text-gray-700">Entry Price:</span>
+            <span className="text-gray-700">{position.entryPrice}</span>
+          </div>
+          <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+            <span className="font-semibold text-gray-700">Close Price:</span>
+            <span className="text-gray-700">{position.closePrice}</span>
+          </div>
+          <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+            <span className="font-semibold text-gray-700">P/L:</span>
+            <span
+              className={`px-4 py-1 rounded-full font-bold text-white ${
+                position.pnl > 0 ? "bg-green-600" : "bg-red-600"
+              }`}
+            >
+              {position.pnl > 0 ? "+" : ""}
+              {position.pnl.toFixed(2)} USDT
+            </span>
+          </div>
+          <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+            <span className="font-semibold text-gray-700">Side:</span>
+            <span
+              className={`px-4 py-1 rounded-full font-bold text-white ${
+                position.side === "Short" ? "bg-red-600" : "bg-green-600"
+              }`}
+            >
+              {position.side}
+            </span>
+          </div>
+          <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+            <span className="font-semibold text-gray-700">Leverage:</span>
+            <span className="px-4 py-1 rounded-full font-bold text-white bg-blue-600">
+              {position.leverage}x
+            </span>
+          </div>
+        </div>
+        {/* Footer */}
+        <div className="bg-white px-6 py-4 flex justify-start border-t">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg text-base transition">
+            Share
+          </button>
+        </div>
+      </Box>
+    </Modal>
+  );
+}
 
 export default function Panel() {
-  const [activeTab, setActiveTab] = useState("myTrader");
-
-  // Sample data for Current Copy
-  const currentCopyRows = [
-    {
-      icon: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=029",
-      symbol: "ETHUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "+15.01 USDT",
-      plColor: "text-green-600",
-      loading: false,
-    },
-    {
-      icon: "https://cryptologos.cc/logos/polygon-matic-logo.png?v=029",
-      symbol: "MATICUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "Loading...",
-      plColor: "text-gray-400",
-      loading: true,
-    },
-    {
-      icon: "https://cryptologos.cc/logos/solana-sol-logo.png?v=029",
-      symbol: "SOLUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "+0.56 USDT",
-      plColor: "text-green-600",
-      loading: false,
-    },
-    {
-      icon: "https://cryptologos.cc/logos/tron-trx-logo.png?v=029",
-      symbol: "TRXUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "-10.25 USDT",
-      plColor: "text-red-500",
-      loading: false,
-    },
-    {
-      icon: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=029",
-      symbol: "BTCUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "+2.61 USDT",
-      plColor: "text-green-600",
-      loading: false,
-    },
-    {
-      icon: "https://cryptologos.cc/logos/polkadot-new-dot-logo.png?v=029",
-      symbol: "DOTUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "-1.92 USDT",
-      plColor: "text-red-500",
-      loading: false,
-    },
-    {
-      icon: "https://cryptologos.cc/logos/shiba-inu-shib-logo.png?v=029",
-      symbol: "SHIBUSDT",
-      trader: "Novin Trader",
-      traderAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      pl: "-5.05 USDT",
-      plColor: "text-red-500",
-      loading: false,
-    },
-  ];
-
   // Sample data for History
   const historyRows = [
     {
@@ -121,6 +153,22 @@ export default function Panel() {
       symbol: "SHIBUSDT",
     },
   ];
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState(null);
+
+  // Mock position details (replace with real data as needed)
+  const mockDetails = {
+    opened: "2025/07/13 09:30:03",
+    icon: "https://cryptologos.cc/logos/cardano-ada-logo.png?v=029",
+    symbol: "ADAUSDT",
+    entryPrice: "0.72260900",
+    closePrice: "0.72747900",
+    pnl: 8.0,
+    side: "Short",
+    leverage: 20,
+  };
 
   return (
     <div className="min-h-screen bg-[#f5f6fa] flex flex-col font-inter">
@@ -206,161 +254,52 @@ export default function Panel() {
             Copy Trade Info
           </h2>
           <div className="border-b mb-4"></div>
-          {/* Tabs */}
-          <div className="flex gap-2 mb-6">
-            <button
-              className={`font-semibold rounded-xl px-10 py-4 shadow text-lg focus:outline-none ${
-                activeTab === "myTrader"
-                  ? "bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white"
-                  : "bg-gray-100 text-[#1e3c72]"
-              }`}
-              onClick={() => setActiveTab("myTrader")}
-            >
-              My Trader
-            </button>
-            <button
-              className={`font-semibold rounded-xl px-10 py-4 shadow text-lg focus:outline-none ${
-                activeTab === "currentCopy"
-                  ? "bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white"
-                  : "bg-gray-100 text-[#1e3c72]"
-              }`}
-              onClick={() => setActiveTab("currentCopy")}
-            >
-              Current Copy
-            </button>
-            <button
-              className={`font-semibold rounded-xl px-10 py-4 shadow text-lg focus:outline-none ${
-                activeTab === "history"
-                  ? "bg-gradient-to-r from-[#1e3c72] to-[#2a5298] text-white"
-                  : "bg-gray-100 text-[#1e3c72]"
-              }`}
-              onClick={() => setActiveTab("history")}
-            >
-              History
-            </button>
-          </div>
-          {/* Tab Content */}
-          {activeTab === "myTrader" && (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-left">
-                <thead>
-                  <tr className="text-[#1e3c72] text-sm uppercase bg-gray-50">
-                    <th className="py-3 px-6 font-bold">#</th>
-                    <th className="py-3 px-6 font-bold">Trader</th>
-                    <th className="py-3 px-6 font-bold">Assets Copy Trading</th>
-                    <th className="py-3 px-6 font-bold">Copy Trading P/L</th>
-                    <th className="py-3 px-6 font-bold">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-white border-b">
-                    <td className="py-4 px-6">
+          {/* Only History Table */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left">
+              <thead>
+                <tr className="text-[#1e3c72] text-sm uppercase bg-gray-50">
+                  <th className="py-3 px-6 font-bold">Position</th>
+                  <th className="py-3 px-6 font-bold">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {historyRows.map((row, idx) => (
+                  <tr key={idx} className="bg-white border-b">
+                    <td className="py-4 px-6 font-semibold text-[#1e3c72] flex items-center gap-3">
                       <img
-                        src="https://randomuser.me/api/portraits/men/32.jpg"
-                        alt="Novin Trader"
-                        className="w-12 h-12 rounded-full object-cover"
+                        src={row.icon}
+                        alt={row.symbol}
+                        className="w-8 h-8 rounded-full object-cover"
                       />
-                    </td>
-                    <td className="py-4 px-6 font-semibold text-[#1e3c72]">
-                      Novin Trader
-                    </td>
-                    <td className="py-4 px-6 font-semibold text-[#1e3c72]">
-                      449 USDT
+                      <span className="font-bold">{row.symbol}</span>
                     </td>
                     <td className="py-4 px-6">
-                      <span className="inline-block bg-green-100 text-green-700 font-bold rounded-full px-6 py-2 text-lg">
-                        50.40 USDT
-                      </span>
-                    </td>
-                    <td className="py-4 px-6">
-                      <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full text-lg transition">
-                        Stop Copy
+                      <button
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-base transition"
+                        onClick={() => {
+                          // For now, always show mockDetails. Later, use row data.
+                          setSelectedPosition({ ...mockDetails, ...row });
+                          setModalOpen(true);
+                        }}
+                      >
+                        Details
                       </button>
                     </td>
                   </tr>
-                </tbody>
-              </table>
-            </div>
-          )}
-          {activeTab === "currentCopy" && (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-left">
-                <thead>
-                  <tr className="text-[#1e3c72] text-sm uppercase bg-gray-50">
-                    <th className="py-3 px-6 font-bold">Position</th>
-                    <th className="py-3 px-6 font-bold">Live P/L</th>
-                    <th className="py-3 px-6 font-bold">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentCopyRows.map((row, idx) => (
-                    <tr key={idx} className="bg-white border-b">
-                      <td className="py-4 px-6 font-semibold text-[#1e3c72] flex items-center gap-3">
-                        <img
-                          src={row.icon}
-                          alt={row.symbol}
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                        <span className="font-bold">{row.symbol}</span>
-                        <span className="text-xs text-gray-500">
-                          Position Created by
-                        </span>
-                        <span className="font-bold">{row.trader}</span>
-                        <img
-                          src={row.traderAvatar}
-                          alt={row.trader}
-                          className="w-6 h-6 rounded-full object-cover ml-1"
-                        />
-                      </td>
-                      <td className={`py-4 px-6 font-semibold ${row.plColor}`}>
-                        {row.loading ? <span>Loading...</span> : row.pl}
-                      </td>
-                      <td className="py-4 px-6 flex gap-2">
-                        <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-base transition">
-                          Close
-                        </button>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-base transition">
-                          Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {activeTab === "history" && (
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-left">
-                <thead>
-                  <tr className="text-[#1e3c72] text-sm uppercase bg-gray-50">
-                    <th className="py-3 px-6 font-bold">Position</th>
-                    <th className="py-3 px-6 font-bold">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {historyRows.map((row, idx) => (
-                    <tr key={idx} className="bg-white border-b">
-                      <td className="py-4 px-6 font-semibold text-[#1e3c72] flex items-center gap-3">
-                        <img
-                          src={row.icon}
-                          alt={row.symbol}
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                        <span className="font-bold">{row.symbol}</span>
-                      </td>
-                      <td className="py-4 px-6">
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg text-base transition">
-                          Details
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
+        {/* Modal for position details (conditionally rendered) */}
+        {modalOpen && (
+          <PositionDetailsModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+            position={selectedPosition}
+          />
+        )}
         {/* Footer */}
         <footer className="w-full text-center text-gray-400 text-sm mt-8 mb-2">
           © 2025. All Rights Reserved.
