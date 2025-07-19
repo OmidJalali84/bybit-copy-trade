@@ -1,4 +1,4 @@
-import Wallet from "../../components/Wallet";
+import WalletPage from "../../components/Wallet";
 export default function Page() {
-  return <Wallet />;
+  return <WalletPage />;
 }
