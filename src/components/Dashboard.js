@@ -587,7 +587,7 @@ export default function Dashboard() {
           <div className="flex gap-4 justify-center mb-8">
             {/* Live Trade Card */}
             <button
-              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-8 py-4 rounded-xl text-lg transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-4 py-2 text-base rounded-lg sm:px-8 sm:py-4 sm:text-lg sm:rounded-xl transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               onClick={handleCopyTrade}
             >
               Live Trade
@@ -595,7 +595,7 @@ export default function Dashboard() {
 
             {/* Analysis Card */}
             <button
-              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-8 py-4 rounded-xl text-lg transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-4 py-2 text-base rounded-lg sm:px-8 sm:py-4 sm:text-lg sm:rounded-xl transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               onClick={handleCopyTrade}
             >
               Analysis
@@ -603,7 +603,7 @@ export default function Dashboard() {
 
             {/* Control Card */}
             <button
-              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-8 py-4 rounded-xl text-lg transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
+              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-4 py-2 text-base rounded-lg sm:px-8 sm:py-4 sm:text-lg sm:rounded-xl transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               onClick={handleCopyTrade}
             >
               Control
