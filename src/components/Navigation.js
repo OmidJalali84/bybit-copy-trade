@@ -120,18 +120,43 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Hamburger Menu Button - visible on mobile/tablet */}
-          <button
-            onClick={toggleMenu}
-            className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-blue-900/60 to-green-900/60 text-white transition-all duration-300 hover:from-blue-800/60 hover:to-green-800/60"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
+          {/* Mobile Wallet Button - visible on mobile/tablet only, outside menu */}
+          <div className="lg:hidden flex items-center gap-2 ml-2">
+            {address ? (
+              <button
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-900/60 to-green-900/60 text-white font-semibold rounded-lg px-4 py-2 transition shadow-lg border border-blue-700 hover:border-blue-400"
+                onClick={handleDisconnect}
+                title="Logout"
+              >
+                <Wallet className="w-5 h-5" />
+                <span className="font-mono text-sm">
+                  {formatAddress(address)}
+                </span>
+                <LogOut className="w-4 h-4 ml-1 text-red-400" />
+              </button>
             ) : (
-              <Menu className="w-6 h-6" />
+              <button
+                className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white font-semibold rounded-lg px-4 py-2 transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleConnect}
+                disabled={isConnecting}
+              >
+                <Wallet className="w-5 h-5" />
+                {isConnecting ? "Logging in..." : "Login"}
+              </button>
             )}
-          </button>
+            {/* Hamburger Menu Button - visible on mobile/tablet */}
+            <button
+              onClick={toggleMenu}
+              className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r from-blue-900/60 to-green-900/60 text-white transition-all duration-300 hover:from-blue-800/60 hover:to-green-800/60"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu Dropdown */}
@@ -155,43 +180,7 @@ export default function Navigation() {
               {/* Divider */}
               <div className="border-t border-blue-900/30 my-4"></div>
 
-              {/* Wallet Section */}
-              <div className="px-4">
-                {address ? (
-                  <div className="space-y-3">
-                    <div className="text-white/60 text-sm font-medium">
-                      Connected Wallet
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-900/30 to-green-900/30 rounded-lg border border-blue-800/40">
-                      <Wallet className="w-5 h-5 text-blue-400" />
-                      <span className="font-mono text-white flex-1">
-                        {formatAddress(address)}
-                      </span>
-                    </div>
-                    <button
-                      onClick={handleDisconnect}
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-600/80 to-red-500/80 hover:from-red-600 hover:to-red-500 text-white font-semibold rounded-lg px-4 py-3 transition-all duration-300"
-                    >
-                      <LogOut className="w-5 h-5" />
-                      Logout
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="text-white/60 text-sm font-medium">
-                      Wallet Connection
-                    </div>
-                    <button
-                      onClick={handleConnect}
-                      disabled={isConnecting}
-                      className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white font-semibold rounded-lg px-4 py-3 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Wallet className="w-5 h-5" />
-                      {isConnecting ? "Logging in..." : "Login"}
-                    </button>
-                  </div>
-                )}
-              </div>
+              {/* Wallet Section - removed from here */}
             </div>
           </div>
         )}
