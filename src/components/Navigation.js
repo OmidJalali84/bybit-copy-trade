@@ -1,7 +1,7 @@
 // Enhanced Navigation with hamburger menu
 import { TrendingUp, Menu, X } from "lucide-react";
 import { Wallet, LogOut } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useWallet } from "../contexts/WalletContext";
 
 function formatAddress(address) {
@@ -12,6 +12,29 @@ function formatAddress(address) {
 export default function Navigation() {
   const { address, isConnecting, connect, disconnect } = useWallet();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasAutoConnected, setHasAutoConnected] = useState(false);
+
+  // Auto-connect on page load
+  useEffect(() => {
+    const autoConnect = async () => {
+      // Check if we haven't already tried to auto-connect and wallet is not connected
+      if (!hasAutoConnected && !address && !isConnecting) {
+        // Small delay to ensure page is fully loaded
+        setTimeout(async () => {
+          try {
+            console.log("Auto-connecting wallet...");
+            await connect();
+          } catch (err) {
+            console.log("Auto-connection failed:", err);
+          } finally {
+            setHasAutoConnected(true);
+          }
+        }, 1000);
+      }
+    };
+
+    autoConnect();
+  }, [address, isConnecting, connect, hasAutoConnected]);
 
   const handleConnect = async () => {
     try {
