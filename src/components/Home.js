@@ -28,11 +28,6 @@ export default function Home() {
             Security
           </a>
         </nav>
-        <div className="flex gap-4">
-          <button className="px-5 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
-            <a href="/dashboard">Get Started</a>
-          </button>
-        </div>
       </header>
       {/* Banner */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4 w-full">
