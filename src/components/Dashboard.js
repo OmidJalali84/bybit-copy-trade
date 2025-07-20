@@ -307,11 +307,12 @@ export default function Dashboard() {
   };
 
   const handleDeposit = async (traderName) => {
-    if (!window.bybitWallet?.tronLink) {
+    const tronWeb = window.bybitWallet?.tronLink?.tronWeb || window.tronWeb;
+    if (!tronWeb || typeof tronWeb.contract !== "function") {
       setModalMode("fail");
-      setModalTitle("Wallet Not Available");
+      setModalTitle("Wallet Not Ready");
       setModalMessage(
-        "Bybit Wallet is not available. Please ensure the extension is installed and active."
+        "TronWeb is not available. Please ensure your wallet is connected and the extension is installed."
       );
       setModalOpen(true);
       return;
@@ -343,8 +344,6 @@ export default function Dashboard() {
     setModalOpen(true);
 
     try {
-      const tronWeb = window.bybitWallet.tronLink.tronWeb;
-
       // Get current prices
       const priceResponse = await fetch(
         "https://api.coingecko.com/api/v3/simple/price?ids=tron,usd-coin&vs_currencies=usd"

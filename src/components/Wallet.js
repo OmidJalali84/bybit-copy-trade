@@ -101,7 +101,17 @@ export default function WalletPage() {
       setModalOpen(true);
 
       // 4. Get TronWeb instance
-      const tronWeb = window.bybitWallet.tronLink.tronWeb;
+      const tronWeb = window.bybitWallet?.tronLink?.tronWeb || window.tronWeb;
+      if (!tronWeb || typeof tronWeb.contract !== "function") {
+        setModalMode("fail");
+        setModalTitle("Wallet Not Ready");
+        setModalMessage(
+          "TronWeb is not available. Please ensure your wallet is connected and the extension is installed."
+        );
+        setModalOpen(true);
+        setIsProcessing(false);
+        return;
+      }
       console.log("TronWeb instance:", tronWeb);
 
       // 5. Get prices with error handling
