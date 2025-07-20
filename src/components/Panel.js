@@ -22,77 +22,8 @@ import {
   X,
 } from "lucide-react";
 
-// Enhanced TickerBar with animations
-function TickerBar() {
-  const [cryptos] = useState([
-    { symbol: "BTC", price: "97,432.50", change: "+2.34%" },
-    { symbol: "ETH", price: "3,847.21", change: "-1.12%" },
-    { symbol: "SOL", price: "245.67", change: "+5.78%" },
-    { symbol: "ADA", price: "0.8921", change: "+3.45%" },
-    { symbol: "XRP", price: "2.4567", change: "-0.89%" },
-    { symbol: "DOT", price: "12.34", change: "+2.11%" },
-  ]);
-
-  return (
-    <div className="bg-gradient-to-r from-[#0f172a] via-blue-900 to-green-900 py-3 px-4 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-green-600/10"></div>
-      <div className="flex animate-scroll space-x-8 text-sm font-medium">
-        {[...cryptos, ...cryptos].map((crypto, idx) => (
-          <div
-            key={idx}
-            className="flex items-center space-x-2 whitespace-nowrap"
-          >
-            <span className="text-white font-bold">{crypto.symbol}/USDT</span>
-            <span className="text-gray-300">${crypto.price}</span>
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-bold ${
-                crypto.change.startsWith("+")
-                  ? "text-emerald-400 bg-emerald-400/20"
-                  : "text-red-400 bg-red-400/20"
-              }`}
-            >
-              {crypto.change}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Navigation() {
-  return (
-    <div className="w-full backdrop-blur-lg bg-gray-900/90 border-b border-blue-900/40 shadow-xl sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-600 rounded-xl flex items-center justify-center">
-            <TrendingUp className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
-            TradeFlex
-          </span>
-        </div>
-        <nav className="flex gap-8 text-lg font-medium">
-          {["Dashboard", "Panel", "Wallet"].map((item, idx) => (
-            <a
-              key={idx}
-              href={`/${item.toLowerCase()}`}
-              className="relative group py-2 px-4 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-900/40 hover:to-green-900/40"
-            >
-              <span className="text-white/80 group-hover:text-blue-400 transition-colors">
-                {item}
-              </span>
-              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-green-400 group-hover:w-full transition-all duration-300"></div>
-            </a>
-          ))}
-          <button className="text-white/60 hover:text-red-400 transition-colors font-medium">
-            Logout
-          </button>
-        </nav>
-      </div>
-    </div>
-  );
-}
+import TickerBar from "./TickerBar";
+import Navigation from "./Navigation";
 
 // Enhanced Modal for position details
 function PositionDetailsModal({ open, onClose, position }) {
@@ -100,14 +31,13 @@ function PositionDetailsModal({ open, onClose, position }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 max-w-md w-full mx-4 overflow-hidden animate-fadeIn">
+      <div className="bg-gray-900/95 backdrop-blur-lg rounded-3xl shadow-2xl border border-blue-900/40 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto animate-fadeIn">
         {/* Header */}
         <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-green-600/20"></div>
           <div className="relative px-6 py-4 flex items-center justify-between">
             <h2 className="text-white text-xl font-bold flex items-center gap-2">
-              <BarChart3 className="w-6 h-6" />
+              <BarChart3 className="w-6 h-6 text-blue-400" />
               Position Details
             </h2>
             <button
@@ -120,7 +50,7 @@ function PositionDetailsModal({ open, onClose, position }) {
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
+        <div className="p-6 space-y-4 bg-gray-900/80">
           {[
             { label: "Opened", value: position.opened, icon: Calendar },
             {
@@ -162,13 +92,13 @@ function PositionDetailsModal({ open, onClose, position }) {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/20 flex items-center justify-between"
+              className="bg-gray-800/70 backdrop-blur-sm rounded-xl p-4 border border-blue-900/30 flex items-center justify-between"
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
-                  <item.icon className="w-5 h-5 text-blue-600" />
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-900/40 to-green-900/40 rounded-lg flex items-center justify-center">
+                  <item.icon className="w-5 h-5 text-blue-400" />
                 </div>
-                <span className="font-semibold text-gray-700">
+                <span className="font-semibold text-white/80">
                   {item.label}:
                 </span>
               </div>
@@ -184,15 +114,15 @@ function PositionDetailsModal({ open, onClose, position }) {
                   className={`font-bold ${
                     item.isProfit
                       ? position.pnl > 0
-                        ? "text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full"
-                        : "text-red-600 bg-red-100 px-3 py-1 rounded-full"
+                        ? "text-emerald-400 bg-emerald-900/40 px-3 py-1 rounded-full"
+                        : "text-red-400 bg-red-900/40 px-3 py-1 rounded-full"
                       : item.isSide
                       ? position.side === "Short"
-                        ? "text-red-600 bg-red-100 px-3 py-1 rounded-full"
-                        : "text-emerald-600 bg-emerald-100 px-3 py-1 rounded-full"
+                        ? "text-red-400 bg-red-900/40 px-3 py-1 rounded-full"
+                        : "text-emerald-400 bg-emerald-900/40 px-3 py-1 rounded-full"
                       : item.isLeverage
-                      ? "text-blue-600 bg-blue-100 px-3 py-1 rounded-full"
-                      : "text-gray-700"
+                      ? "text-blue-400 bg-blue-900/40 px-3 py-1 rounded-full"
+                      : "text-white/80"
                   }`}
                 >
                   {item.value}
@@ -203,8 +133,8 @@ function PositionDetailsModal({ open, onClose, position }) {
         </div>
 
         {/* Footer */}
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-t border-white/20">
-          <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
+        <div className="bg-gradient-to-r from-blue-900/60 to-green-900/60 px-6 py-4 border-t border-blue-900/40">
+          <button className="w-full bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white font-bold py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg">
             <ExternalLink className="w-5 h-5" />
             Share Position
           </button>

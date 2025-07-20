@@ -1,11 +1,11 @@
 "use client";
-
-import { useRouter } from "next/navigation";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
-  const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-900 from-[#0f172a] to-[#1e293b] flex flex-col font-sans w-full">
+      <ToastContainer position="top-right" autoClose={4000} />
       {/* Header */}
       <header className="w-full flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 py-6 gap-4 sm:gap-0">
         <div className="flex items-center gap-3">
@@ -54,12 +54,12 @@ export default function Home() {
           management.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 w-full">
-          <button
-            className="px-8 py-4 rounded-lg bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition w-full sm:w-auto"
-            onClick={() => router.push("/dashboard")}
-          >
-            Start Copying Trades &rarr;
-          </button>
+          <a href="/dashboard">
+            <button className="px-8 py-4 rounded-lg bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition w-full sm:w-auto">
+              Start Copying Trades &rarr;
+            </button>
+          </a>
+
           <button className="px-8 py-4 rounded-lg border border-white/20 text-white/90 font-bold text-lg shadow-lg hover:bg-white/10 transition w-full sm:w-auto">
             View Top Traders
           </button>
