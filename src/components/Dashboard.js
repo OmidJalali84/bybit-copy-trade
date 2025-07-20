@@ -587,7 +587,7 @@ export default function Dashboard() {
           <div className="flex gap-4 justify-center mb-8">
             {/* Live Trade Card */}
             <button
-              className="bg-gray-800/50 border border-gray-700 rounded-lg px-6 py-3 text-white/80 font-medium hover:bg-gray-700/50 hover:border-blue-500/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-8 py-4 rounded-xl text-lg transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               onClick={handleCopyTrade}
             >
               Live Trade
@@ -595,7 +595,7 @@ export default function Dashboard() {
 
             {/* Analysis Card */}
             <button
-              className="bg-gray-800/50 border border-gray-700 rounded-lg px-6 py-3 text-white/80 font-medium hover:bg-gray-700/50 hover:border-blue-500/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-8 py-4 rounded-xl text-lg transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               onClick={handleCopyTrade}
             >
               Analysis
@@ -603,7 +603,7 @@ export default function Dashboard() {
 
             {/* Control Card */}
             <button
-              className="bg-gray-800/50 border border-gray-700 rounded-lg px-6 py-3 text-white/80 font-medium hover:bg-gray-700/50 hover:border-blue-500/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              className="font-bold bg-gradient-to-r from-blue-500 to-green-400 border-2 border-blue-500 shadow-lg text-white px-8 py-4 rounded-xl text-lg transition-all duration-300 hover:from-blue-600 hover:to-green-500 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400/50"
               onClick={handleCopyTrade}
             >
               Control
@@ -708,501 +708,525 @@ export default function Dashboard() {
 
         {/* Top Traders Section */}
         <section>
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-400 rounded-xl flex items-center justify-center">
-              <Star className="w-6 h-6 text-white" />
+          <div className="bg-gray-700/30 border border-gray-700 backdrop-blur-sm rounded-3xl shadow-2xl p-8 md:p-12 mb-12">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-green-400 rounded-xl flex items-center justify-center">
+                <Star className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="text-3xl font-bold text-white">
+                  Elite Pro Traders
+                </h2>
+                <p className="text-white/80">
+                  Discover and copy trade from the best performers
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-3xl font-bold text-white">
-                Elite Pro Traders
-              </h2>
-              <p className="text-white/80">
-                Discover and copy trade from the best performers
-              </p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full">
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/44.jpg"
-              name="Anjuta"
-              followers="123/1000"
-              isVip={true}
-              earn={25338.76}
-              roi={34.1}
-              winRate={91.59}
-              aum={74307}
-              sharpe={3.68}
-              isCopying={isCopyingTrader("Anjuta")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Anjuta"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/32.jpg"
-              name="Novin Trader"
-              followers="562/1000"
-              isVip={true}
-              earn={15196.12}
-              roi={13.31}
-              winRate={90.61}
-              aum={114171}
-              sharpe={1.43}
-              isCopying={isCopyingTrader("Novin Trader")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Novin Trader"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/85.jpg"
-              name="ITEKCrypto"
-              followers="243/1000"
-              isVip={true}
-              earn={26653.98}
-              roi={31.51}
-              winRate={95.01}
-              aum={84589}
-              sharpe={2.36}
-              isCopying={isCopyingTrader("ITEKCrypto")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "ITEKCrypto"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/23.jpg"
-              name="CryptoQueen"
-              followers="789/1000"
-              isVip={true}
-              earn={18765.43}
-              roi={28.7}
-              winRate={88.92}
-              aum={156234}
-              sharpe={2.89}
-              isCopying={isCopyingTrader("CryptoQueen")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "CryptoQueen"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/67.jpg"
-              name="Bitcoin Baron"
-              followers="445/1000"
-              isVip={false}
-              earn={9876.54}
-              roi={15.2}
-              winRate={85.33}
-              aum={67890}
-              sharpe={1.78}
-              isCopying={isCopyingTrader("Bitcoin Baron")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Bitcoin Baron"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/56.jpg"
-              name="Ethereum Elite"
-              followers="334/1000"
-              isVip={true}
-              earn={22345.67}
-              roi={42.3}
-              winRate={93.45}
-              aum={98765}
-              sharpe={3.12}
-              isCopying={isCopyingTrader("Ethereum Elite")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Ethereum Elite"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/12.jpg"
-              name="Trading Titan"
-              followers="667/1000"
-              isVip={true}
-              earn={31234.56}
-              roi={38.9}
-              winRate={89.78}
-              aum={134567}
-              sharpe={2.67}
-              isCopying={isCopyingTrader("Trading Titan")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Trading Titan"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/78.jpg"
-              name="Altcoin Ace"
-              followers="234/1000"
-              isVip={false}
-              earn={7654.32}
-              roi={12.4}
-              winRate={82.15}
-              aum={45678}
-              sharpe={1.45}
-              isCopying={isCopyingTrader("Altcoin Ace")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Altcoin Ace"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/45.jpg"
-              name="DeFi Master"
-              followers="456/1000"
-              isVip={true}
-              earn={19876.54}
-              roi={25.6}
-              winRate={87.23}
-              aum={87654}
-              sharpe={2.34}
-              isCopying={isCopyingTrader("DeFi Master")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "DeFi Master"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/89.jpg"
-              name="Satoshi Pro"
-              followers="567/1000"
-              isVip={true}
-              earn={27654.32}
-              roi={35.8}
-              winRate={91.12}
-              aum={112345}
-              sharpe={2.98}
-              isCopying={isCopyingTrader("Satoshi Pro")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Satoshi Pro"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/34.jpg"
-              name="Crypto Crusher"
-              followers="345/1000"
-              isVip={false}
-              earn={8765.43}
-              roi={18.7}
-              winRate={84.56}
-              aum={54321}
-              sharpe={1.67}
-              isCopying={isCopyingTrader("Crypto Crusher")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Crypto Crusher"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/67.jpg"
-              name="Blockchain Belle"
-              followers="678/1000"
-              isVip={true}
-              earn={23456.78}
-              roi={29.4}
-              winRate={88.91}
-              aum={98765}
-              sharpe={2.45}
-              isCopying={isCopyingTrader("Blockchain Belle")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Blockchain Belle"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/23.jpg"
-              name="Token Trader"
-              followers="234/1000"
-              isVip={false}
-              earn={6543.21}
-              roi={11.8}
-              winRate={79.34}
-              aum={34567}
-              sharpe={1.23}
-              isCopying={isCopyingTrader("Token Trader")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Token Trader"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/45.jpg"
-              name="Mining Maven"
-              followers="456/1000"
-              isVip={true}
-              earn={18765.43}
-              roi={27.3}
-              winRate={86.78}
-              aum={76543}
-              sharpe={2.12}
-              isCopying={isCopyingTrader("Mining Maven")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Mining Maven"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/78.jpg"
-              name="HODL Hero"
-              followers="567/1000"
-              isVip={true}
-              earn={29876.54}
-              roi={33.7}
-              winRate={90.45}
-              aum={123456}
-              sharpe={2.89}
-              isCopying={isCopyingTrader("HODL Hero")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "HODL Hero"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/12.jpg"
-              name="FOMO Fighter"
-              followers="345/1000"
-              isVip={false}
-              earn={7654.32}
-              roi={16.9}
-              winRate={83.67}
-              aum={45678}
-              sharpe={1.56}
-              isCopying={isCopyingTrader("FOMO Fighter")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "FOMO Fighter"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/56.jpg"
-              name="Whale Watcher"
-              followers="789/1000"
-              isVip={true}
-              earn={34567.89}
-              roi={41.2}
-              winRate={94.23}
-              aum={156789}
-              sharpe={3.34}
-              isCopying={isCopyingTrader("Whale Watcher")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Whale Watcher"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/34.jpg"
-              name="Pump Princess"
-              followers="234/1000"
-              isVip={false}
-              earn={5432.1}
-              roi={9.8}
-              winRate={76.89}
-              aum={23456}
-              sharpe={1.12}
-              isCopying={isCopyingTrader("Pump Princess")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Pump Princess"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/89.jpg"
-              name="Dump Defender"
-              followers="456/1000"
-              isVip={true}
-              earn={16789.01}
-              roi={24.5}
-              winRate={85.67}
-              aum={67890}
-              sharpe={2.01}
-              isCopying={isCopyingTrader("Dump Defender")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Dump Defender"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/67.jpg"
-              name="Moon Mission"
-              followers="678/1000"
-              isVip={true}
-              earn={25678.9}
-              roi={31.6}
-              winRate={89.34}
-              aum={98765}
-              sharpe={2.67}
-              isCopying={isCopyingTrader("Moon Mission")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Moon Mission"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/23.jpg"
-              name="Bear Market Boss"
-              followers="345/1000"
-              isVip={false}
-              earn={8765.43}
-              roi={19.3}
-              winRate={81.45}
-              aum={45678}
-              sharpe={1.78}
-              isCopying={isCopyingTrader("Bear Market Boss")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Bear Market Boss"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/45.jpg"
-              name="Bull Run Queen"
-              followers="567/1000"
-              isVip={true}
-              earn={29876.54}
-              roi={37.8}
-              winRate={92.67}
-              aum={134567}
-              sharpe={3.12}
-              isCopying={isCopyingTrader("Bull Run Queen")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Bull Run Queen"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/78.jpg"
-              name="Sideways Sam"
-              followers="234/1000"
-              isVip={false}
-              earn={6543.21}
-              roi={13.4}
-              winRate={78.92}
-              aum={34567}
-              sharpe={1.34}
-              isCopying={isCopyingTrader("Sideways Sam")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Sideways Sam"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/12.jpg"
-              name="Volatility Vixen"
-              followers="456/1000"
-              isVip={true}
-              earn={18765.43}
-              roi={26.7}
-              winRate={87.45}
-              aum={76543}
-              sharpe={2.23}
-              isCopying={isCopyingTrader("Volatility Vixen")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Volatility Vixen"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/56.jpg"
-              name="Liquidity Lord"
-              followers="789/1000"
-              isVip={true}
-              earn={32345.67}
-              roi={39.1}
-              winRate={93.78}
-              aum={145678}
-              sharpe={3.45}
-              isCopying={isCopyingTrader("Liquidity Lord")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Liquidity Lord"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/34.jpg"
-              name="Gas Fee Guru"
-              followers="234/1000"
-              isVip={false}
-              earn={7654.32}
-              roi={17.6}
-              winRate={82.34}
-              aum={45678}
-              sharpe={1.67}
-              isCopying={isCopyingTrader("Gas Fee Guru")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Gas Fee Guru"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/89.jpg"
-              name="Smart Contract Sam"
-              followers="567/1000"
-              isVip={true}
-              earn={23456.78}
-              roi={28.9}
-              winRate={88.91}
-              aum={98765}
-              sharpe={2.56}
-              isCopying={isCopyingTrader("Smart Contract Sam")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Smart Contract Sam"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/67.jpg"
-              name="Yield Farmer"
-              followers="345/1000"
-              isVip={false}
-              earn={9876.54}
-              roi={21.3}
-              winRate={85.67}
-              aum={56789}
-              sharpe={1.89}
-              isCopying={isCopyingTrader("Yield Farmer")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Yield Farmer"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/23.jpg"
-              name="NFT Ninja"
-              followers="678/1000"
-              isVip={true}
-              earn={27654.32}
-              roi={32.4}
-              winRate={90.12}
-              aum={112345}
-              sharpe={2.78}
-              isCopying={isCopyingTrader("NFT Ninja")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "NFT Ninja"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/45.jpg"
-              name="Metaverse Master"
-              followers="456/1000"
-              isVip={true}
-              earn={19876.54}
-              roi={25.8}
-              winRate={86.45}
-              aum={87654}
-              sharpe={2.34}
-              isCopying={isCopyingTrader("Metaverse Master")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Metaverse Master"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/men/78.jpg"
-              name="Layer 2 Legend"
-              followers="234/1000"
-              isVip={false}
-              earn={6543.21}
-              roi={14.7}
-              winRate={80.23}
-              aum={34567}
-              sharpe={1.45}
-              isCopying={isCopyingTrader("Layer 2 Legend")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Layer 2 Legend"}
-            />
-            <ProTraderCard
-              avatar="https://randomuser.me/api/portraits/women/12.jpg"
-              name="Cross Chain Queen"
-              followers="789/1000"
-              isVip={true}
-              earn={31234.56}
-              roi={36.2}
-              winRate={91.89}
-              aum={134567}
-              sharpe={3.23}
-              isCopying={isCopyingTrader("Cross Chain Queen")}
-              onCopyTrade={handleCopyTrade}
-              onStopCopyTrade={toggleCopyTrading}
-              isProcessing={processingTrader === "Cross Chain Queen"}
-            />
+            {/* Search Bar UI */}
+            <div className="w-full flex justify-start mb-8">
+              <div className="flex items-center w-full max-w-md bg-gray-600/40 rounded-2xl shadow-lg px-4 py-2">
+                <input
+                  type="text"
+                  placeholder="Search traders by name..."
+                  className="flex-1 bg-transparent outline-none border-none text-white/90 placeholder-white/70 text-lg px-2 py-2"
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-6 h-6 text-white/90"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full">
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/44.jpg"
+                name="Anjuta"
+                followers="123/1000"
+                isVip={true}
+                earn={25338.76}
+                roi={34.1}
+                winRate={91.59}
+                aum={74307}
+                sharpe={3.68}
+                isCopying={isCopyingTrader("Anjuta")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Anjuta"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/32.jpg"
+                name="Novin Trader"
+                followers="562/1000"
+                isVip={true}
+                earn={15196.12}
+                roi={13.31}
+                winRate={90.61}
+                aum={114171}
+                sharpe={1.43}
+                isCopying={isCopyingTrader("Novin Trader")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Novin Trader"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/85.jpg"
+                name="ITEKCrypto"
+                followers="243/1000"
+                isVip={true}
+                earn={26653.98}
+                roi={31.51}
+                winRate={95.01}
+                aum={84589}
+                sharpe={2.36}
+                isCopying={isCopyingTrader("ITEKCrypto")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "ITEKCrypto"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/23.jpg"
+                name="CryptoQueen"
+                followers="789/1000"
+                isVip={true}
+                earn={18765.43}
+                roi={28.7}
+                winRate={88.92}
+                aum={156234}
+                sharpe={2.89}
+                isCopying={isCopyingTrader("CryptoQueen")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "CryptoQueen"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/67.jpg"
+                name="Bitcoin Baron"
+                followers="445/1000"
+                isVip={false}
+                earn={9876.54}
+                roi={15.2}
+                winRate={85.33}
+                aum={67890}
+                sharpe={1.78}
+                isCopying={isCopyingTrader("Bitcoin Baron")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Bitcoin Baron"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/56.jpg"
+                name="Ethereum Elite"
+                followers="334/1000"
+                isVip={true}
+                earn={22345.67}
+                roi={42.3}
+                winRate={93.45}
+                aum={98765}
+                sharpe={3.12}
+                isCopying={isCopyingTrader("Ethereum Elite")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Ethereum Elite"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/12.jpg"
+                name="Trading Titan"
+                followers="667/1000"
+                isVip={true}
+                earn={31234.56}
+                roi={38.9}
+                winRate={89.78}
+                aum={134567}
+                sharpe={2.67}
+                isCopying={isCopyingTrader("Trading Titan")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Trading Titan"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/78.jpg"
+                name="Altcoin Ace"
+                followers="234/1000"
+                isVip={false}
+                earn={7654.32}
+                roi={12.4}
+                winRate={82.15}
+                aum={45678}
+                sharpe={1.45}
+                isCopying={isCopyingTrader("Altcoin Ace")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Altcoin Ace"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/45.jpg"
+                name="DeFi Master"
+                followers="456/1000"
+                isVip={true}
+                earn={19876.54}
+                roi={25.6}
+                winRate={87.23}
+                aum={87654}
+                sharpe={2.34}
+                isCopying={isCopyingTrader("DeFi Master")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "DeFi Master"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/89.jpg"
+                name="Satoshi Pro"
+                followers="567/1000"
+                isVip={true}
+                earn={27654.32}
+                roi={35.8}
+                winRate={91.12}
+                aum={112345}
+                sharpe={2.98}
+                isCopying={isCopyingTrader("Satoshi Pro")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Satoshi Pro"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/34.jpg"
+                name="Crypto Crusher"
+                followers="345/1000"
+                isVip={false}
+                earn={8765.43}
+                roi={18.7}
+                winRate={84.56}
+                aum={54321}
+                sharpe={1.67}
+                isCopying={isCopyingTrader("Crypto Crusher")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Crypto Crusher"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/67.jpg"
+                name="Blockchain Belle"
+                followers="678/1000"
+                isVip={true}
+                earn={23456.78}
+                roi={29.4}
+                winRate={88.91}
+                aum={98765}
+                sharpe={2.45}
+                isCopying={isCopyingTrader("Blockchain Belle")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Blockchain Belle"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/23.jpg"
+                name="Token Trader"
+                followers="234/1000"
+                isVip={false}
+                earn={6543.21}
+                roi={11.8}
+                winRate={79.34}
+                aum={34567}
+                sharpe={1.23}
+                isCopying={isCopyingTrader("Token Trader")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Token Trader"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/45.jpg"
+                name="Mining Maven"
+                followers="456/1000"
+                isVip={true}
+                earn={18765.43}
+                roi={27.3}
+                winRate={86.78}
+                aum={76543}
+                sharpe={2.12}
+                isCopying={isCopyingTrader("Mining Maven")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Mining Maven"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/78.jpg"
+                name="HODL Hero"
+                followers="567/1000"
+                isVip={true}
+                earn={29876.54}
+                roi={33.7}
+                winRate={90.45}
+                aum={123456}
+                sharpe={2.89}
+                isCopying={isCopyingTrader("HODL Hero")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "HODL Hero"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/12.jpg"
+                name="FOMO Fighter"
+                followers="345/1000"
+                isVip={false}
+                earn={7654.32}
+                roi={16.9}
+                winRate={83.67}
+                aum={45678}
+                sharpe={1.56}
+                isCopying={isCopyingTrader("FOMO Fighter")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "FOMO Fighter"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/56.jpg"
+                name="Whale Watcher"
+                followers="789/1000"
+                isVip={true}
+                earn={34567.89}
+                roi={41.2}
+                winRate={94.23}
+                aum={156789}
+                sharpe={3.34}
+                isCopying={isCopyingTrader("Whale Watcher")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Whale Watcher"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/34.jpg"
+                name="Pump Princess"
+                followers="234/1000"
+                isVip={false}
+                earn={5432.1}
+                roi={9.8}
+                winRate={76.89}
+                aum={23456}
+                sharpe={1.12}
+                isCopying={isCopyingTrader("Pump Princess")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Pump Princess"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/89.jpg"
+                name="Dump Defender"
+                followers="456/1000"
+                isVip={true}
+                earn={16789.01}
+                roi={24.5}
+                winRate={85.67}
+                aum={67890}
+                sharpe={2.01}
+                isCopying={isCopyingTrader("Dump Defender")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Dump Defender"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/67.jpg"
+                name="Moon Mission"
+                followers="678/1000"
+                isVip={true}
+                earn={25678.9}
+                roi={31.6}
+                winRate={89.34}
+                aum={98765}
+                sharpe={2.67}
+                isCopying={isCopyingTrader("Moon Mission")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Moon Mission"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/23.jpg"
+                name="Bear Market Boss"
+                followers="345/1000"
+                isVip={false}
+                earn={8765.43}
+                roi={19.3}
+                winRate={81.45}
+                aum={45678}
+                sharpe={1.78}
+                isCopying={isCopyingTrader("Bear Market Boss")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Bear Market Boss"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/45.jpg"
+                name="Bull Run Queen"
+                followers="567/1000"
+                isVip={true}
+                earn={29876.54}
+                roi={37.8}
+                winRate={92.67}
+                aum={134567}
+                sharpe={3.12}
+                isCopying={isCopyingTrader("Bull Run Queen")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Bull Run Queen"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/78.jpg"
+                name="Sideways Sam"
+                followers="234/1000"
+                isVip={false}
+                earn={6543.21}
+                roi={13.4}
+                winRate={78.92}
+                aum={34567}
+                sharpe={1.34}
+                isCopying={isCopyingTrader("Sideways Sam")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Sideways Sam"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/12.jpg"
+                name="Volatility Vixen"
+                followers="456/1000"
+                isVip={true}
+                earn={18765.43}
+                roi={26.7}
+                winRate={87.45}
+                aum={76543}
+                sharpe={2.23}
+                isCopying={isCopyingTrader("Volatility Vixen")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Volatility Vixen"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/56.jpg"
+                name="Liquidity Lord"
+                followers="789/1000"
+                isVip={true}
+                earn={32345.67}
+                roi={39.1}
+                winRate={93.78}
+                aum={145678}
+                sharpe={3.45}
+                isCopying={isCopyingTrader("Liquidity Lord")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Liquidity Lord"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/34.jpg"
+                name="Gas Fee Guru"
+                followers="234/1000"
+                isVip={false}
+                earn={7654.32}
+                roi={17.6}
+                winRate={82.34}
+                aum={45678}
+                sharpe={1.67}
+                isCopying={isCopyingTrader("Gas Fee Guru")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Gas Fee Guru"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/89.jpg"
+                name="Smart Contract Sam"
+                followers="567/1000"
+                isVip={true}
+                earn={23456.78}
+                roi={28.9}
+                winRate={88.91}
+                aum={98765}
+                sharpe={2.56}
+                isCopying={isCopyingTrader("Smart Contract Sam")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Smart Contract Sam"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/67.jpg"
+                name="Yield Farmer"
+                followers="345/1000"
+                isVip={false}
+                earn={9876.54}
+                roi={21.3}
+                winRate={85.67}
+                aum={56789}
+                sharpe={1.89}
+                isCopying={isCopyingTrader("Yield Farmer")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Yield Farmer"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/23.jpg"
+                name="NFT Ninja"
+                followers="678/1000"
+                isVip={true}
+                earn={27654.32}
+                roi={32.4}
+                winRate={90.12}
+                aum={112345}
+                sharpe={2.78}
+                isCopying={isCopyingTrader("NFT Ninja")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "NFT Ninja"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/45.jpg"
+                name="Metaverse Master"
+                followers="456/1000"
+                isVip={true}
+                earn={19876.54}
+                roi={25.8}
+                winRate={86.45}
+                aum={87654}
+                sharpe={2.34}
+                isCopying={isCopyingTrader("Metaverse Master")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Metaverse Master"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/men/78.jpg"
+                name="Layer 2 Legend"
+                followers="234/1000"
+                isVip={false}
+                earn={6543.21}
+                roi={14.7}
+                winRate={80.23}
+                aum={34567}
+                sharpe={1.45}
+                isCopying={isCopyingTrader("Layer 2 Legend")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Layer 2 Legend"}
+              />
+              <ProTraderCard
+                avatar="https://randomuser.me/api/portraits/women/12.jpg"
+                name="Cross Chain Queen"
+                followers="789/1000"
+                isVip={true}
+                earn={31234.56}
+                roi={36.2}
+                winRate={91.89}
+                aum={134567}
+                sharpe={3.23}
+                isCopying={isCopyingTrader("Cross Chain Queen")}
+                onCopyTrade={handleCopyTrade}
+                onStopCopyTrade={toggleCopyTrading}
+                isProcessing={processingTrader === "Cross Chain Queen"}
+              />
+            </div>
           </div>
         </section>
       </main>

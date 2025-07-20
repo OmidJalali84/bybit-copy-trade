@@ -345,36 +345,36 @@ export default function Panel() {
                       key={idx}
                       className="border-b border-gray-800 hover:bg-gray-800/40 transition-all duration-300"
                     >
-                      <td className="py-6 px-6">
-                        <div className="flex items-center gap-4">
-                          <div className="relative">
+                      <td className="py-3 px-2 sm:py-6 sm:px-6">
+                        <div className="flex items-center gap-2 sm:gap-4">
+                          <div className="relative flex-shrink-0">
                             <img
                               src={row.icon}
                               alt={row.symbol}
-                              className="w-12 h-12 rounded-full object-cover shadow-lg"
+                              className="w-8 h-8 sm:w-12 sm:h-12 rounded-full object-cover shadow-lg"
                             />
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
+                            <div className="absolute -bottom-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-emerald-500 rounded-full border-2 border-white"></div>
                           </div>
-                          <div>
-                            <div className="font-bold text-xl text-white">
+                          <div className="whitespace-nowrap">
+                            <div className="font-bold text-base sm:text-xl text-white">
                               {row.symbol}
                             </div>
-                            <div className="text-white/60 text-sm">
+                            <div className="text-white/60 text-xs sm:text-sm">
                               Active Position
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="py-6 px-6 text-center">
+                      <td className="py-3 px-2 sm:py-6 sm:px-6 text-center">
                         <button
-                          className="bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg flex items-center gap-2 mx-auto"
+                          className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold py-1 px-2 sm:py-2 sm:px-4 rounded-xl transition-all duration-300 shadow-lg flex items-center justify-center gap-1 sm:gap-2 mx-auto text-xs sm:text-base whitespace-nowrap"
                           onClick={() => {
                             setSelectedPosition({ ...mockDetails, ...row });
                             setModalOpen(true);
                           }}
                         >
-                          <Eye className="w-5 h-5" />
-                          View Details
+                          <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                          <span className="truncate">Details</span>
                         </button>
                       </td>
                     </tr>
