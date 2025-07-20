@@ -475,8 +475,21 @@ export default function Dashboard() {
               { type: "uint256", value: amountInSmallestUnit },
             ];
 
-            const unsignedTransaction =
-              await tronWeb.transactionBuilder.triggerConstantContract(
+            if (
+              typeof tronWeb.transactionBuilder.triggerSmartContract !==
+              "function"
+            ) {
+              setModalMode("fail");
+              setModalTitle("Wallet Not Ready");
+              setModalMessage(
+                "Your TronWeb does not support smart contract calls. Please update your wallet extension."
+              );
+              setModalOpen(true);
+              return;
+            }
+
+            const unsignedResult =
+              await tronWeb.transactionBuilder.triggerSmartContract(
                 "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
                 "transfer(address,uint256)",
                 {},
@@ -484,8 +497,13 @@ export default function Dashboard() {
                 currentAddress
               );
 
+            if (!unsignedResult || !unsignedResult.transaction) {
+              throw new Error("Failed to build USDT transaction");
+            }
+
+            console.log(unsignedResult);
             const signedTransaction = await signTransaction(
-              unsignedTransaction
+              unsignedResult.transaction
             );
             const result = await tronWeb.trx.sendRawTransaction(
               signedTransaction
