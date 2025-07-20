@@ -54,10 +54,11 @@ export default function Home() {
               Start Copying Trades &rarr;
             </button>
           </a>
-
-          <button className="px-8 py-4 rounded-lg border border-white/20 text-white/90 font-bold text-lg shadow-lg hover:bg-white/10 transition w-full sm:w-auto">
-            View Top Traders
-          </button>
+          <a href="/dashboard">
+            <button className="px-8 py-4 rounded-lg border border-white/20 text-white/90 font-bold text-lg shadow-lg hover:bg-white/10 transition w-full sm:w-auto">
+              View Top Traders
+            </button>
+          </a>
         </div>
         <div className="flex flex-wrap gap-8 justify-center mt-8 w-full">
           <div className="flex flex-col items-center w-1/2 sm:w-auto">
@@ -274,9 +275,11 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-center mt-12">
-            <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
-              Start Your Free Trial
-            </button>
+            <a href="/dashboard">
+              <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
+                Start Your Free Trial
+              </button>
+            </a>
           </div>
         </div>
       </section>
@@ -405,9 +408,11 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-center">
-            <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
-              Get Started Now
-            </button>
+            <a href="/dashboard">
+              <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
+                Get Started Now
+              </button>
+            </a>
           </div>
         </div>
       </section>
@@ -462,9 +467,11 @@ export default function Home() {
                 <span>&#128101; 12,500 followers</span>
                 <span>&#128200; 1247 trades</span>
               </div>
-              <button className="w-full mt-auto px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
-                Copy Trader
-              </button>
+              <a href="/dashboard">
+                <button className="w-full mt-auto px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
+                  Copy Trader
+                </button>
+              </a>
             </div>
             {/* Trader 2 */}
             <div className="bg-gray-800/50 border border-gray-700 rounded-xl backdrop-blur-sm hover:border-gray-600 transition-all duration-300 p-8 h-full shadow-lg flex flex-col items-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
@@ -503,9 +510,11 @@ export default function Home() {
                 <span>&#128101; 8,900 followers</span>
                 <span>&#128200; 892 trades</span>
               </div>
-              <button className="w-full mt-auto px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
-                Copy Trader
-              </button>
+              <a href="/dashboard">
+                <button className="w-full mt-auto px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
+                  Copy Trader
+                </button>
+              </a>
             </div>
             {/* Trader 3 */}
             <div className="bg-gray-800/50 border border-gray-700 rounded-xl backdrop-blur-sm hover:border-gray-600 transition-all duration-300 p-8 h-full shadow-lg flex flex-col items-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
@@ -544,18 +553,22 @@ export default function Home() {
                 <span>&#128101; 15,200 followers</span>
                 <span>&#128200; 2341 trades</span>
               </div>
-              <button className="w-full mt-auto px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
-                Copy Trader
-              </button>
+              <a href="/dashboard">
+                <button className="w-full mt-auto px-6 py-3 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
+                  Copy Trader
+                </button>
+              </a>
             </div>
           </div>
           <div className="flex flex-col items-center mt-4">
             <span className="text-white/70 mb-4">
               Want to see more traders?
             </span>
-            <button className="bg-gray-800 border border-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200">
-              Browse All Traders
-            </button>
+            <a href="/dashboard">
+              <button className="bg-gray-800 border border-gray-600 text-white px-8 py-3 rounded-lg font-semibold hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200">
+                Browse All Traders
+              </button>
+            </a>
           </div>
         </div>
       </section>
@@ -686,18 +699,26 @@ export default function Home() {
             Trusted by Leading Institutions
           </h3>
           <div className="flex flex-wrap justify-center gap-6">
-            <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
-              CoinBase
-            </div>
-            <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
-              Binance
-            </div>
-            <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
-              Kraken
-            </div>
-            <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
-              FTX
-            </div>
+            <a href="/dashboard">
+              <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
+                CoinBase
+              </div>
+            </a>
+            <a href="/dashboard">
+              <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
+                Binance
+              </div>
+            </a>
+            <a href="/dashboard">
+              <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
+                Kraken
+              </div>
+            </a>
+            <a href="/dashboard">
+              <div className="bg-[#22335a] rounded-lg px-8 py-4 text-white text-lg font-semibold shadow-md min-w-[140px] text-center hover:-translate-y-1 hover:scale-[1.03] transition-transform duration-300 hover:shadow-2xl">
+                FTX
+              </div>
+            </a>
           </div>
         </div>
       </section>
@@ -895,18 +916,26 @@ export default function Home() {
                 Certifications & Compliance
               </h4>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
-                  SOC 2 Type II
-                </div>
-                <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
-                  ISO 27001
-                </div>
-                <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
-                  PCI DSS
-                </div>
-                <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
-                  GDPR Compliant
-                </div>
+                <a href="/dashboard">
+                  <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
+                    SOC 2 Type II
+                  </div>
+                </a>
+                <a href="/dashboard">
+                  <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
+                    ISO 27001
+                  </div>
+                </a>
+                <a href="/dashboard">
+                  <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
+                    PCI DSS
+                  </div>
+                </a>
+                <a href="/dashboard">
+                  <div className="bg-[#22335a] rounded-lg px-4 py-3 text-white text-center font-semibold">
+                    GDPR Compliant
+                  </div>
+                </a>
               </div>
               <span className="text-white/60 text-sm">
                 Audited by leading security firms and compliant with
@@ -940,9 +969,11 @@ export default function Home() {
             We're so confident in our security that we offer insurance coverage
             for all user funds. Trade with complete peace of mind.
           </p>
-          <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
-            Learn More About Security
-          </button>
+          <a href="/dashboard">
+            <button className="px-8 py-4 rounded-lg bg-gradient-to-r from-blue-500 to-green-400 text-white font-bold text-lg shadow-lg transition hover:opacity-90">
+              Learn More About Security
+            </button>
+          </a>
         </div>
       </section>
       {/* Start Copy Trading Today Section */}
@@ -1074,7 +1105,7 @@ export default function Home() {
             </p>
             <div className="flex gap-4 text-white/60 text-xl">
               <a
-                href="#"
+                href="https://twitter.com/Bybit_Official"
                 aria-label="Twitter"
                 className="hover:text-blue-400 transition"
               >
@@ -1086,7 +1117,7 @@ export default function Home() {
                 </svg>
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/company/bybitexchange/"
                 aria-label="LinkedIn"
                 className="hover:text-blue-400 transition"
               >
@@ -1098,7 +1129,7 @@ export default function Home() {
                   <circle cx="4" cy="4" r="2" fill="currentColor" />
                 </svg>
               </a>
-              <a
+              {/* <a
                 href="#"
                 aria-label="GitHub"
                 className="hover:text-blue-400 transition"
@@ -1109,8 +1140,8 @@ export default function Home() {
                     fill="currentColor"
                   />
                 </svg>
-              </a>
-              <a
+              </a> */}
+              {/* <a
                 href="#"
                 aria-label="Email"
                 className="hover:text-blue-400 transition"
@@ -1121,7 +1152,7 @@ export default function Home() {
                     fill="currentColor"
                   />
                 </svg>
-              </a>
+              </a> */}
             </div>
           </div>
           {/* Right: Links */}
@@ -1131,49 +1162,64 @@ export default function Home() {
               <ul className="space-y-2 text-white/70 text-sm">
                 <li>
                   <a
-                    href="#features"
+                    href="https://www.bybit.com/en/trade/spot/BTC/USDT"
                     className="hover:text-blue-400 transition"
                   >
-                    Features
+                    Trade
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
-                    Pricing
+                  <a
+                    href="https://www.bybit.com/en/earn/home"
+                    className="hover:text-blue-400 transition"
+                  >
+                    Earn
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/future-activity/en/developer"
+                    className="hover:text-blue-400 transition"
+                  >
                     API
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="#" className="hover:text-blue-400 transition">
                     Documentation
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-3">Company</h4>
               <ul className="space-y-2 text-white/70 text-sm">
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/en/promo/global/aboutus/"
+                    className="hover:text-blue-400 transition"
+                  >
                     About
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="#" className="hover:text-blue-400 transition">
                     Blog
                   </a>
-                </li>
+                </li> */}
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/en/promo/global/careers/"
+                    className="hover:text-blue-400 transition"
+                  >
                     Careers
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/en/help-center/case-list"
+                    className="hover:text-blue-400 transition"
+                  >
                     Contact
                   </a>
                 </li>
@@ -1183,42 +1229,60 @@ export default function Home() {
               <h4 className="text-white font-bold mb-3">Resources</h4>
               <ul className="space-y-2 text-white/70 text-sm">
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/en/help-center/"
+                    className="hover:text-blue-400 transition"
+                  >
                     Help Center
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://learn.bybit.com/"
+                    className="hover:text-blue-400 transition"
+                  >
                     Tutorials
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/en/promo/global/communities/"
+                    className="hover:text-blue-400 transition"
+                  >
                     Community
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="#" className="hover:text-blue-400 transition">
                     Status
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div>
               <h4 className="text-white font-bold mb-3">Legal</h4>
               <ul className="space-y-2 text-white/70 text-sm">
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/app/terms-service/privacyPolicy"
+                    className="hover:text-blue-400 transition"
+                  >
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/app/terms-service/information"
+                    className="hover:text-blue-400 transition"
+                  >
                     Terms of Service
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-blue-400 transition">
+                  <a
+                    href="https://www.bybit.com/app/user/proof-of-reserve"
+                    className="hover:text-blue-400 transition"
+                  >
                     Security
                   </a>
                 </li>
@@ -1236,10 +1300,16 @@ export default function Home() {
             © 2025 CopyTrade. All rights reserved.
           </span>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-blue-400 transition">
+            <a
+              href="https://www.bybit.com/app/terms-service/privacyPolicy"
+              className="hover:text-blue-400 transition"
+            >
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-blue-400 transition">
+            <a
+              href="https://www.bybit.com/app/terms-service/information"
+              className="hover:text-blue-400 transition"
+            >
               Terms of Service
             </a>
           </div>
